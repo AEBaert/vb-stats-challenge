@@ -2,7 +2,7 @@ import { presetDarkPalettes } from '@ant-design/colors';
 import { Progress } from 'antd';
 import cx from 'classnames';
 
-import { type Competition, type Pool } from '@/model/model';
+import { type Competition, getCompetitionLabel, type Pool } from '@/model/model';
 import { getDayRanking, getPoolProbabilities } from '@/model/model-helpers';
 
 import './Help.scss';
@@ -76,11 +76,11 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
       <div className="vb-info-header">
         <img src={vbStatsLogo} className="vb-stats-icon" alt="vb-stats logo" />
         <h2>
-          VB Stats - {`CDF ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
+          VB Stats - {`${getCompetitionLabel(competition.entity)} ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
         </h2>
         <div className={cx('vb-info-scroll', { 'vb-info-unplayed': day > competition.lastDay })}>
           <p>
-            Bienvenue dans la page de pronostics de la Coupe de France Volley-Ball {competition.category}{' '}
+            Bienvenue dans la page de statistiques du {getCompetitionLabel(competition.entity)} Volley-Ball {competition.category}{' '}
             {competition.season}.
           </p>
           <p>
