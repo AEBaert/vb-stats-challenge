@@ -79,6 +79,7 @@ const Shell = () => {
   const [season, setSeason] = useState<string>(params.season ?? seasonToString(defaultSeason));
   const [entity, setEntity] = useState<Entity>((params.entity as Entity) ?? defaultEntity);
   const [category, setCategory] = useState<string>(params.category ?? defaultCategory);
+  const availableCategories = entity === 'CHALLENGE' ? ['M18M'] : categories;
   const [dayCount, setDayCount] = useState<number>(-1);
   const [day, setDay] = useState<number>(Number.isNaN(pday) ? 0 : pday);
   const [singleDay, setSingleDay] = useState<boolean>(params.singleDay === 'true'); // OVERALL - J0x (default false)
@@ -154,8 +155,8 @@ const Shell = () => {
     return <div />;
   }
 
-  if (!categories.includes(category)) {
-    setCategory(categories[0]);
+  if (!availableCategories.includes(category)) {
+    setCategory(availableCategories[0]);
     return <div />;
   }
 
@@ -203,10 +204,13 @@ const Shell = () => {
           }
           break;
         }
-        case 'competition':
-          setEntity(e.key as Entity);
+        case 'competition': {
+          const nextEntity = e.key as Entity;
+          setEntity(nextEntity);
+          if (nextEntity === 'CHALLENGE') setCategory('M18M');
           setDay(0);
           break;
+        }
         case 'category':
           setCategory(e.key);
           break;
@@ -325,7 +329,7 @@ const Shell = () => {
       `${getCompetitionLabel(entity)} ${category}`,
       'category',
       undefined, // <TeamOutlined />,
-      categories.map((ccategory) =>
+      availableCategories.map((ccategory) =>
         getItem(ccategory, ccategory, ccategory === category ? <TeamOutlined /> : <Checked />),
       ),
     ),
