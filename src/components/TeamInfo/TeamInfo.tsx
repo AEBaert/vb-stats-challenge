@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import MatchSheetLink from '@/components/MatchSheetLink/MatchSheetLink';
 import Trophies from '@/components/Trophies/Trophies';
-import { type Competition, type Match, type Team } from '@/model/model';
+import { type Competition, getCompetitionLabel, type Match, type Team } from '@/model/model';
 import {
   getDayRanking,
   getTeamMatch,
@@ -47,7 +47,7 @@ const renderTeam = ({ competition, team, day, displayRanking }: TeamInfoProps) =
       <div className="vb-card-split">
         <div className="vb-card-left">
           <div className="vb-legend">
-            {`CDF ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
+            {`${getCompetitionLabel(competition.entity)} ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
           </div>
         </div>
         <div className="vb-card-right">

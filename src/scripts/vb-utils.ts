@@ -8,12 +8,13 @@ import qs from 'query-string';
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 const iaxios = axios.create({ httpsAgent });
 
-export type Entity = 'ACJEUNES' | 'ABCCS' | 'LICA'; // TODO
+export type Entity = 'CDF' | 'CHALLENGE' | 'ACJEUNES' | 'ABCCS' | 'LICA'; // TODO
 export type Division = 'M13M' | 'M15M' | 'M18M' | 'M21M' | 'M13F' | 'M15F' | 'M18F' | 'M21F';
 export type Pool = 'PMA';
 
 const competitions: Record<string, string> = {
   CDF: 'ACJEUNES',
+  CHALLENGE: 'ACJEUNES',
 };
 
 const divisions: Record<string, string> = {
@@ -25,6 +26,10 @@ const divisions: Record<string, string> = {
   M15F: 'MFX', // minimes
   M18F: 'CFX', // cadets
   M21F: 'JFX', // juniors
+};
+
+const challengeDivisions: Partial<Record<Division, string>> = {
+  M18M: 'RMX',
 };
 
 const fetchCalendar = async ({
@@ -102,7 +107,7 @@ export const fetchFFVBResults = async ({
   day?: number;
 }): Promise<string[]> => {
   const codent = competitions[entity] ?? entity;
-  const coddiv = divisions[division ?? ''] ?? division;
+  const coddiv = entity === 'CHALLENGE' ? (division ? challengeDivisions[division] : undefined) : divisions[division ?? ''] ?? division;
   const codpool = pool;
   const tour = day ? day.toString().padStart(2, '0') : '';
   const filepath = path.join(

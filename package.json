@@ -2,7 +2,7 @@
   "name": "vb-stats",
   "private": true,
   "version": "0.14.2",
-  "homepage": "https://gillesdandrea.github.io/vb-stats",
+  "homepage": "https://aebaert.github.io/vb-stats-challenge",
   "type": "module",
   "scripts": {
     "dev": "vite",

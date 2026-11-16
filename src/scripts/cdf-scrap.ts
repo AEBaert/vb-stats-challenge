@@ -6,6 +6,7 @@ import { type Division, type Entity, fetchFFVBResults } from './vb-utils';
 
 const competitions = {
   CDF: ['M13M', 'M15M', 'M18M', 'M21M', 'M13F', 'M15F', 'M18F', 'M21F'],
+  CHALLENGE: ['M18M'],
 };
 
 (async () => {

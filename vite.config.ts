@@ -7,7 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/vb-stats',
+  base: '/vb-stats-challenge/',
   css: {
     preprocessorOptions: {
       scss: {
@@ -23,7 +23,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'VB Stats',
-        short_name: 'vb-stats',
+        short_name: 'vb-stats-challenge',
         description: 'Volleyball Stats',
         theme_color: '#000000',
         background_color: '#000000',
