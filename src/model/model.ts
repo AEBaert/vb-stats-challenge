@@ -28,6 +28,7 @@ export interface Competition {
   readonly season: string;
   readonly entity: Entity;
   readonly category: string;
+  readonly initialRatings?: ReadonlyMap<string, Rating>;
   readonly teams: Map<string, Team>;
   readonly matchs: Match[];
   readonly days: CompetitionDay[];
