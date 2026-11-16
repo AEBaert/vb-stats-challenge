@@ -12,7 +12,7 @@ import Help from '@/components/Help/Help';
 import MatchSheetLink from '@/components/MatchSheetLink/MatchSheetLink';
 import TeamInfo from '@/components/TeamInfo/TeamInfo';
 import Trophies from '@/components/Trophies/Trophies';
-import { type Competition, type Match, type Pool, type Team } from '@/model/model';
+import { type Competition, getCompetitionLabel, type Match, type Pool, type Team } from '@/model/model';
 import {
   filterTeam,
   getBoard,
@@ -129,7 +129,7 @@ const renderTeam = ({
           </div>
         </div>
 
-        {day > 1 && (
+        {(day > 1 || competition.entity === 'CHALLENGE') && (
           <div className="vb-card-chart">
             <Progress type="dashboard" percent={probability} size={88} strokeColor={color} strokeWidth={8} />
           </div>
@@ -209,7 +209,7 @@ const renderPool = ({
               {poolId2Name(pool.name)}
             </Avatar>
             <div className="vb-legend">
-              {`CDF ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
+              {`${getCompetitionLabel(competition.entity)} ${competition.category} ${competition.season.substring(competition.season.length - 4)}`}
               &nbsp;
               <Tag>{getDay(day)}</Tag>
               <small>{pool.matchs[0]?.date}</small>
