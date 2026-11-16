@@ -107,7 +107,7 @@ export const fetchFFVBResults = async ({
   day?: number;
 }): Promise<string[]> => {
   const codent = competitions[entity] ?? entity;
-  const coddiv = entity === 'CHALLENGE' ? challengeDivisions[division ?? ''] ?? division : divisions[division ?? ''] ?? division;
+  const coddiv = entity === 'CHALLENGE' ? (division ? challengeDivisions[division] : undefined) : divisions[division ?? ''] ?? division;
   const codpool = pool;
   const tour = day ? day.toString().padStart(2, '0') : '';
   const filepath = path.join(
