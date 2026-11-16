@@ -1,10 +1,11 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
 import Papa from 'papaparse';
+import type { Rating } from 'ts-trueskill';
 
 import { createMetaStats, metaAddMatch, metaToString } from '@/model/meta';
 import { type Competition, type Entity, getResourceName, type MatchRow } from '@/model/model';
-import { createCompetition } from '@/model/model-helpers';
+import { createCompetition, getGlobalTeamStats } from '@/model/model-helpers';
 import { processCompetition } from '@/model/model-process';
 
 const useCompetition = (season: number, entity: Entity, category: string): UseQueryResult<Competition, Error> => {
@@ -21,7 +22,45 @@ const useCompetition = (season: number, entity: Entity, category: string): UseQu
         skipEmptyLines: true,
       });
 
-      const competition = createCompetition('Volley-Ball Stats', `${season - 1}/${season}`, entity, category);
+      let initialRatings: Map<string, Rating> | undefined;
+      if (entity === 'CHALLENGE') {
+        const cdfResource = getResourceName(season, 'CDF', category);
+        const cdfRequest = await axios.get(import.meta.env.BASE_URL + '/data/' + cdfResource);
+        const { data: cdfData } = Papa.parse<MatchRow>(cdfRequest.data, {
+          header: true,
+          delimiter: ';',
+          skipEmptyLines: true,
+        });
+        const cdfCompetition = createCompetition('CDF Seed', `${season - 1}/${season}`, 'CDF', category);
+        if (cdfData.length > 0) processCompetition(cdfCompetition, [cdfData]);
+
+        const firstChallengeDay = new Map<string, number>();
+        data.forEach((row) => {
+          const day = Number(row.Jo);
+          if (!Number.isFinite(day) || day <= 0 || day === 99) return;
+          [row.EQA_no, row.EQB_no].forEach((teamId) => {
+            if (!teamId) return;
+            const previous = firstChallengeDay.get(teamId);
+            if (previous === undefined || day < previous) firstChallengeDay.set(teamId, day);
+          });
+        });
+
+        initialRatings = new Map<string, Rating>();
+        firstChallengeDay.forEach((challengeDay, teamId) => {
+          const cdfTeam = cdfCompetition.teams.get(teamId);
+          if (!cdfTeam || cdfTeam.lastDay <= 0) return;
+          const cdfDay = Math.min(challengeDay, cdfTeam.lastDay);
+          initialRatings?.set(teamId, getGlobalTeamStats(cdfTeam, cdfDay).rating);
+        });
+      }
+
+      const competition = createCompetition(
+        'Volley-Ball Stats',
+        `${season - 1}/${season}`,
+        entity,
+        category,
+        initialRatings,
+      );
       try {
         data.length > 0 && processCompetition(competition, [data]);
       } catch (e) {

@@ -43,16 +43,22 @@ export const rateMatch = (ratingWinner: Rating, ratingLoser: Rating, tightScore 
 export const rateWinPropability = (ratingWinner: Rating, ratingLoser: Rating): number =>
   winProbability([ratingWinner], [ratingLoser], ts);
 
-export const getWinProbability = (teamA: Team, teamB: Team, day: number): number => {
-  return day === 1 ? 0.5 : winProbability([getTeamRating(teamA, day - 1)], [getTeamRating(teamB, day - 1)], ts);
-};
+export const getWinProbability = (teamA: Team, teamB: Team, day: number): number =>
+  winProbability([getTeamRating(teamA, day - 1)], [getTeamRating(teamB, day - 1)], ts);
 
-export const createCompetition = (name: string, season: string, entity: Entity, category: string): Competition => {
+export const createCompetition = (
+  name: string,
+  season: string,
+  entity: Entity,
+  category: string,
+  initialRatings?: ReadonlyMap<string, Rating>,
+): Competition => {
   const competition = {
     name,
     season,
     entity,
     category,
+    initialRatings,
     teams: new Map<string, Team>(),
     matchs: [],
     days: [],
@@ -85,7 +91,7 @@ export const getTeam = (competition: Competition, id: string, name?: string): Te
     return team;
   }
 
-  const rating = new Rating();
+  const rating = competition.initialRatings?.get(id) ?? new Rating();
   const newTeam: Team = {
     id,
     name: name ?? id,
@@ -192,12 +198,6 @@ export const poolId2Name = (id: string): string => {
 };
 
 export const getPoolProbabilities = (pool: Pool, day: number): number[][] => {
-  if (day === 1) {
-    return [
-      [1 / 3.0, 1 / 3.0, 1 / 3.0],
-      [0, 0, 0],
-    ];
-  }
   const pt0 =
     getWinProbability(pool.teams[0], pool.teams[1], day) * getWinProbability(pool.teams[0], pool.teams[2], day);
   const pt1 =
