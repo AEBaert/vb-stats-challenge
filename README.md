@@ -1,10 +1,13 @@
 # vb-stats — Volleyball Stats
 
 A React + TypeScript + Vite PWA that explores French youth volleyball (FFVB) competition statistics:
-pool standings, TrueSkill ratings, win probabilities, and team relationship graphs — mainly for the
-Coupe de France youth categories.
+pool standings, TrueSkill ratings, win probabilities, and team relationship graphs.
 
-Live app: [gillesdandrea.github.io/vb-stats](https://gillesdandrea.github.io/vb-stats)
+This fork adds support for the **Challenge de France M18 masculin** while keeping the Coupe de France available.
+
+Original project: [gillesdandrea/vb-stats](https://github.com/gillesdandrea/vb-stats)
+
+Challenge fork: [AEBaert/vb-stats-challenge](https://github.com/AEBaert/vb-stats-challenge)
 
 ## Getting started
 
@@ -32,3 +35,8 @@ needed.
 - [AGENTS.md](AGENTS.md) — architecture, code organization and conventions
 - [README-SHEETS.md](README-SHEETS.md) — match sheet (player statistics) workflow
 - [docs/](docs/) — how the FFVB assembles pools, and the pool prediction algorithm specification
+
+
+## Credits
+
+Based on `vb-stats` by Gilles d'Andrea, distributed under the MIT License. FFVolley remains the source of competition results.
