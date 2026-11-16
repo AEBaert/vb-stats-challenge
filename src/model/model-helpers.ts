@@ -12,6 +12,7 @@ import { matchSorter, rankingSorter, ratingSorter, Sorting } from './model-sorte
 // const mu = 25;
 // const sigma = mu / 3;
 // const ts = new TrueSkill(mu, sigma, sigma / 2, sigma / 100, 0);
+// Keep the original vb-stats TrueSkill semantics; see docs/rating-methodology.md.
 const ts = new TrueSkill(undefined, undefined, undefined, undefined, 0);
 const TIGHT_FACTOR = 4 / 5; // 1 to disable tight score management
 const MIN_DELTA = 0.0001;
