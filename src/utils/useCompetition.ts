@@ -23,6 +23,8 @@ const useCompetition = (season: number, entity: Entity, category: string): UseQu
       });
 
       let initialRatings: Map<string, Rating> | undefined;
+      // Fork-specific Challenge seeding; this is not part of the original vb-stats rating model.
+      // See docs/rating-methodology.md before changing or relying on this behaviour.
       if (entity === 'CHALLENGE') {
         const cdfResource = getResourceName(season, 'CDF', category);
         const cdfRequest = await axios.get(import.meta.env.BASE_URL + '/data/' + cdfResource);
