@@ -12,13 +12,16 @@ export const categories = ['M13M', 'M15M', 'M18M', 'M21M', 'M13F', 'M15F', 'M18F
 export const getResourceName = (season: number, entity: Entity, category: string) =>
   `FFVB-${season}-${entity === 'ACJEUNES' ? 'CDF' : entity}-${category}.CSV`;
 
+export const getCompetitionLabel = (entity: Entity): string =>
+  entity === 'CHALLENGE' ? 'Challenge' : entity === 'CDF' || entity === 'ACJEUNES' ? 'CDF' : entity;
+
 export const defaultSeason = 2026;
-export const defaultEntity: Entity = 'ACJEUNES';
+export const defaultEntity: Entity = 'CHALLENGE';
 export const defaultCategory = 'M18M';
 export const seasonToString = (season: number) => `${season - 1}/${season}`;
 export const seasonToNumber = (season: string) => Number.parseInt(season.substring(5));
 
-export type Entity = 'ACJEUNES' | 'ABCCS' | 'LICA'; // TODO
+export type Entity = 'CDF' | 'CHALLENGE' | 'ACJEUNES' | 'ABCCS' | 'LICA'; // TODO
 
 export interface Competition {
   readonly name: string;
