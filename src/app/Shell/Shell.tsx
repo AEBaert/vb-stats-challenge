@@ -13,6 +13,7 @@ import {
   defaultEntity,
   defaultSeason,
   type Entity,
+  getCompetitionLabel,
   getResourceName,
   seasons as iseasons,
   seasonToNumber,
@@ -76,7 +77,7 @@ const Shell = () => {
 
   const pday: number = Number.parseInt(params.day);
   const [season, setSeason] = useState<string>(params.season ?? seasonToString(defaultSeason));
-  const [entity] = useState<Entity>((params.entity as Entity) ?? defaultEntity);
+  const [entity, setEntity] = useState<Entity>((params.entity as Entity) ?? defaultEntity);
   const [category, setCategory] = useState<string>(params.category ?? defaultCategory);
   const [dayCount, setDayCount] = useState<number>(-1);
   const [day, setDay] = useState<number>(Number.isNaN(pday) ? 0 : pday);
@@ -202,6 +203,10 @@ const Shell = () => {
           }
           break;
         }
+        case 'competition':
+          setEntity(e.key as Entity);
+          setDay(0);
+          break;
         case 'category':
           setCategory(e.key);
           break;
@@ -309,7 +314,15 @@ const Shell = () => {
       // !dayEnabled,
     ),
     getItem(
-      `${isCDF ? 'CDF ' : ''}${category}`,
+      getCompetitionLabel(entity),
+      'competition',
+      undefined,
+      (['CHALLENGE', 'CDF'] as Entity[]).map((centity) =>
+        getItem(getCompetitionLabel(centity), centity, centity === entity ? <TeamOutlined /> : <Checked />),
+      ),
+    ),
+    getItem(
+      `${getCompetitionLabel(entity)} ${category}`,
       'category',
       undefined, // <TeamOutlined />,
       categories.map((ccategory) =>
