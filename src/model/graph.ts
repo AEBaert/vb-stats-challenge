@@ -1,4 +1,4 @@
-import { type Competition, type Match, type Score, type Team, Victory } from './model';
+import { type Competition, getCompetitionLabel, type Match, type Score, type Team, Victory } from './model';
 import {
   getBoard,
   getDayDistance,
@@ -117,7 +117,7 @@ export const getGraph = (
   const qualifiedTeams = new Set<Team>();
   const teams: Team[] = getBoard(competition, Sorting.POINTS, day, singleDay, qualified).filter(teamFilter);
   const isCDF = teams.length > 0 && teams[0].pools.length > 0;
-  const title = `${isCDF ? 'CDF ' : ''}${competition.category} ${competition.season}`;
+  const title = `${isCDF ? `${getCompetitionLabel(competition.entity)} ` : ''}${competition.category} ${competition.season}`;
   teams.forEach((team) => qualifiedTeams.add(team));
   return `digraph {
   tooltip="${title}"
