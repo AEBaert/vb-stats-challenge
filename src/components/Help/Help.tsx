@@ -90,6 +90,15 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
             permet d&apos;estimer la probabilité de victoire pour chaque match et la probabilité pour chaque équipe de
             terminer premier de sa poule.
           </p>
+          {competition.entity === 'CHALLENGE' ? (
+            <p>
+              Pour le Challenge M18M, le <i>rating</i> suit la même équipe sur la saison : une équipe entrant au T1
+              Challenge conserve son état après le T1 Coupe, et une équipe entrant au T2 conserve son état après le T2
+              Coupe. Les règles de mise à jour TrueSkill restent celles du projet original. En revanche, les points,
+              classements, victoires, sets et points marqués/encaissés affichés pour le Challenge utilisent uniquement
+              les matchs du Challenge.
+            </p>
+          ) : null}
           <p>
             La barre de recherche permet de filtrer les équipes par noms, départements ou régions. Par exemple,{' '}
             <i>&quot;cannes 84 occit&quot;</i> affichera toutes les poules contenant l&apos;équipe de Cannes, celles du
