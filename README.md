@@ -34,7 +34,8 @@ needed.
 
 - [AGENTS.md](AGENTS.md) — architecture, code organization and conventions
 - [README-SHEETS.md](README-SHEETS.md) — match sheet (player statistics) workflow
-- [docs/](docs/) — how the FFVB assembles pools, and the pool prediction algorithm specification
+- [docs/](docs/) — technical documentation
+- [docs/rating-methodology.md](docs/rating-methodology.md) — original vb-stats TrueSkill methodology and fork deviations
 
 
 ## Credits
