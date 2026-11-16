@@ -100,7 +100,7 @@ const Shell = () => {
   useEffect(() => {
     if (day > 0 && fetched) {
       const search = tokens.length === 0 ? '' : `&search=${tokens.join('+')}`;
-      const url = `/vb-stats?tab=${tab}${season ? `&season=${season}` : ''}${entity === defaultEntity ? '' : `&entity=${entity}`}${category ? `&category=${category}` : ''}${
+      const url = `/vb-stats-challenge/?tab=${tab}${season ? `&season=${season}` : ''}${entity === defaultEntity ? '' : `&entity=${entity}`}${category ? `&category=${category}` : ''}${
         day ? `&day=${day === dayCount ? 'last' : day}` : ''
       }&singleDay=${!!singleDay}&qualified=${!!qualified}${sliding > 0 ? `&sliding=${sliding}` : ''}${search}`;
       if (window.location.href !== `${window.location.origin}${url}`) {
