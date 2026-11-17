@@ -64,8 +64,10 @@ const renderTeam = ({ competition, team, day, displayRanking }: TeamInfoProps) =
             <div className="small-text">
               <div>
                 ranking: {ranking ?? '-'} / {competition.days[day].teams.length} <small>{delta}</small> | points:{' '}
-                {Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / {6 * dayCount}
-                {2 * dayCount !== stats.matchCount ? '*' : ''}
+                {competition.entity === 'CHALLENGE'
+                  ? `${stats.points} / ${3 * stats.matchCount}`
+                  : `${Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${6 * dayCount}`}
+                {competition.entity !== 'CHALLENGE' && 2 * dayCount !== stats.matchCount ? '*' : ''}
               </div>
               <div>
                 matchs: {stats.matchWon}/{stats.matchCount} | sets: {stats.setWon}/{stats.setLost}={sratio} | points:{' '}
@@ -160,8 +162,10 @@ const renderMatchs = (
         <div className={cx('subtitle', { eliminated })}>
           <div>
             ranking: {ranking ?? '-'} / {competition.days[day].teams.length} <small>{delta}</small> | points:{' '}
-            {Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / {6 * dayCount}
-            {2 * dayCount !== stats.matchCount ? '*' : ''}
+            {competition.entity === 'CHALLENGE'
+              ? `${stats.points} / ${3 * stats.matchCount}`
+              : `${Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${6 * dayCount}`}
+            {competition.entity !== 'CHALLENGE' && 2 * dayCount !== stats.matchCount ? '*' : ''}
           </div>
           <div>
             matchs: {stats.matchWon}/{stats.matchCount} | sets: {stats.setWon}/{stats.setLost}={sratio} | points:{' '}
