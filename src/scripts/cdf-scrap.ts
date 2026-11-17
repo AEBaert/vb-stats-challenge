@@ -28,6 +28,12 @@ const competitions = {
   await PromisePool.withConcurrency(4)
     .for(results)
     .process(async ({ season, entity, division }) => {
-      await fetchFFVBResults({ season, entity: entity as Entity, division: division as Division });
+      const lines = await fetchFFVBResults({ season, entity: entity as Entity, division: division as Division });
+      if (entity === 'CHALLENGE' && lines.length === 0) {
+        throw new Error(`No Challenge data returned for ${season - 1}/${season} ${division}`);
+      }
+      if (entity === 'CHALLENGE') {
+        console.log(`Challenge ${season - 1}/${season} ${division}: ${lines.length} match rows`);
+      }
     });
 })();
