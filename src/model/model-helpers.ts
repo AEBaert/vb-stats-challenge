@@ -2,7 +2,7 @@ import { Rating, TrueSkill, winProbability } from 'ts-trueskill';
 
 import { getDepartment } from './geography';
 import { type Competition, type Entity, type Match, type Pool, type Stats, type Team } from './model';
-import { matchSorter, rankingSorter, ratingSorter, Sorting } from './model-sorters';
+import { challengeDay2Sorter, matchSorter, rankingSorter, ratingSorter, Sorting } from './model-sorters';
 
 // mu, sigma, beta, tau, drawProbability
 // this.mu = mu ?? 25;
@@ -349,6 +349,7 @@ export const getBoard = (
     board.sort(ratingSorter(day, !daily));
   } else {
     if (isPFday(day)) board.sort(matchSorter(day, !daily, true));
+    else if (competition.entity === 'CHALLENGE' && day === 2 && !daily) board.sort(challengeDay2Sorter(day, true));
     else board.sort(rankingSorter(day, !daily));
   }
 

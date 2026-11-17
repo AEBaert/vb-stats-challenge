@@ -153,5 +153,25 @@ Only the rating history is continuous. Sporting statistics remain separate:
 The purpose of the inherited Coupe rating is only to avoid treating an incoming
 team as completely unknown when prior same-season M18M results already exist.
 
+### Challenge J2 global ranking
+
+Challenge J2 is a special comparison point because some teams entered the
+Challenge at J1 while others arrive only at J2 from the Coupe.
+
+For J2 only, the fork does **not** extrapolate Challenge points to simulate a
+missing Challenge round. The global Board is ordered by:
+
+1. actual J2 pool place (all 1st-place teams, then all 2nd-place teams, then all
+   3rd-place teams);
+2. continuous seasonal TrueSkill rating inside each pool-place group.
+
+Displayed Challenge points remain the actual Challenge points earned, with the
+actual maximum based on matches played.
+
+From J3 onward, no new teams enter from the Coupe and the application returns
+to the original global ranking algorithm. This deliberate transition should be
+checked when J3 results become available to make sure it does not create
+unreasonable rank discontinuities.
+
 Any future change to this modelling assumption or to the original TrueSkill
 update parameters must be documented here before being merged.

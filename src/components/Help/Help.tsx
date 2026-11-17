@@ -96,7 +96,9 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
               Challenge conserve son état après le T1 Coupe, et une équipe entrant au T2 conserve son état après le T2
               Coupe. Les règles de mise à jour TrueSkill restent celles du projet original. En revanche, les points,
               classements, victoires, sets et points marqués/encaissés affichés pour le Challenge utilisent uniquement
-              les matchs du Challenge.
+              les matchs du Challenge. Au J2 uniquement, le classement global place d&apos;abord les premiers de
+              poule, puis les deuxièmes, puis les troisièmes ; à place égale, le rating TrueSkill départage les
+              équipes. À partir du J3, le classement global standard est de nouveau utilisé.
             </p>
           ) : null}
           <p>

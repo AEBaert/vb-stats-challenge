@@ -23,7 +23,7 @@ import {
   isTeamInCourse,
   rateMatch,
 } from './model-helpers';
-import { rankingSorter } from './model-sorters';
+import { challengeDay2Sorter, rankingSorter } from './model-sorters';
 
 export const createMatch = (competition: Competition, data: MatchRow): Match => {
   const teamA = getTeam(competition, data.EQA_no, data.EQA_nom);
@@ -295,9 +295,23 @@ export const processCompetition = (competition: Competition, datas: MatchRow[][]
             addCompetitionMatch(competition, match);
           });
 
-          // compute ranking
+          // Compute pool places first: Challenge J2 global ranking depends on them.
+          competition.days[day].pools.forEach((pool: Pool) => {
+            const teams = [...pool.teams];
+            if (pool.matchs.every((match) => match.winner)) {
+              teams.sort(rankingSorter(day, false));
+              teams.forEach((team, index) => {
+                team.ranking.pools[day] = index + 1;
+              });
+            }
+          });
+
+          // Compute global rankings. Only Challenge J2 uses pool place then rating;
+          // J3+ deliberately returns to the original global ranking algorithm.
+          const globalSorter =
+            competition.entity === 'CHALLENGE' && day === 2 ? challengeDay2Sorter(day, true) : rankingSorter(day, true);
           const teams = Array.from(competition.teams.values());
-          teams.sort(rankingSorter(day, true));
+          teams.sort(globalSorter);
           teams.forEach((team, index) => {
             team.ranking.globals[day] = index + 1;
           });
@@ -307,18 +321,9 @@ export const processCompetition = (competition: Competition, datas: MatchRow[][]
             team.ranking.days[day] = index + 1;
           });
           const running = [...competition.days[day].teams];
-          running.sort(rankingSorter(day, true));
+          running.sort(globalSorter);
           running.forEach((team, index) => {
             team.ranking.qualifieds[day] = index + 1;
-          });
-          competition.days[day].pools.forEach((pool: Pool) => {
-            const teams = [...pool.teams];
-            if (pool.matchs.every((match) => match.winner)) {
-              teams.sort(rankingSorter(day, false));
-              teams.forEach((team, index) => {
-                team.ranking.pools[day] = index + 1;
-              });
-            }
           });
           if (day > 1) {
             const teams = [...competition.days[day].teams];
