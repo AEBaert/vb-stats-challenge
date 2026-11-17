@@ -21,6 +21,16 @@ export const ratingSorter: TeamSorter =
     return bstats.rating.mu - astats.rating.mu;
   };
 
+// Challenge J2 is the only round where teams with different Challenge entry dates coexist.
+// Rank first by the actual J2 pool place, then by the continuous seasonal TrueSkill rating.
+export const challengeDay2Sorter: TeamSorter =
+  (day, _global = true, _pf = false, _slidingMaxDays = 4) =>
+  (a: Team, b: Team) => {
+    const arank = a.ranking.pools[day] ?? Number.MAX_SAFE_INTEGER;
+    const brank = b.ranking.pools[day] ?? Number.MAX_SAFE_INTEGER;
+    return arank === brank ? ratingSorter(day, true)(a, b) : arank - brank;
+  };
+
 // Sorting.POINTS
 export const rankingSorter: TeamSorter =
   (day, global = true, pf = false, slidingMaxDays = 4) =>
