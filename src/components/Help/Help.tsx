@@ -111,10 +111,15 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
             <i>Graph</i>) mais aussi de changer de journée, de catégorie ou de saison.
           </p>
           <p>
-            Toutes les données utilisées viennent du site de la{' '}
-            <a href="http://www.ffvb.org/index.php?lvlid=124&dsgtypid=38&artid=1095&pos=2">FFVB</a>. N&apos;hésitez pas
-            à m&apos;envoyer un message sur insta <a href="https://www.instagram.com/gillesdandrea">@gillesdandrea</a>{' '}
-            ou sur le compte ami <a href="https://www.instagram.com/cdf_volley__masculin">@cdf_volley__masculin</a>
+            Toutes les données utilisées proviennent du site de la{' '}
+            <a href="http://www.ffvb.org/index.php?lvlid=124&dsgtypid=38&artid=1095&pos=2">FFVolley</a>.
+          </p>
+          <p>
+            Ce site est une adaptation du projet original{' '}
+            <a href="https://github.com/gillesdandrea/vb-stats">vb-stats</a> développé par Gilles Dandrea. Le code
+            source original et la méthodologie de calcul sont conservés et adaptés ici au Challenge de France M18M.
+            Le code de cette adaptation est disponible sur{' '}
+            <a href="https://github.com/AEBaert/vb-stats-challenge">GitHub</a>.
           </p>
           <p>
             Enfin, les statistiques ci-dessous vous disent combien de fois TrueSkill™ a raison (
