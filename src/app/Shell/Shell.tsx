@@ -9,6 +9,7 @@ import CompetitionGraph from '@/app/CompetitionGraph/CompetitionGraph';
 import CompetitionPools from '@/app/CompetitionPools/CompetitionPools';
 import {
   categories,
+  challengeSeasons,
   defaultCategory,
   defaultEntity,
   defaultSeason,
@@ -29,6 +30,7 @@ import vbStatsLogo from '/vb-stats-logo.svg';
 const BREAKPOINT = 512; // 576
 
 const seasons = iseasons.map(seasonToString);
+const challengeSeasonLabels = challengeSeasons.map(seasonToString);
 
 const tabNames: Record<string, string> = {
   pools: 'Pools',
@@ -80,6 +82,7 @@ const Shell = () => {
   const [entity, setEntity] = useState<Entity>((params.entity as Entity) ?? defaultEntity);
   const [category, setCategory] = useState<string>(params.category ?? defaultCategory);
   const availableCategories = entity === 'CHALLENGE' ? ['M18M'] : categories;
+  const availableSeasons = entity === 'CHALLENGE' ? challengeSeasonLabels : seasons;
   const [dayCount, setDayCount] = useState<number>(-1);
   const [day, setDay] = useState<number>(Number.isNaN(pday) ? 0 : pday);
   const [singleDay, setSingleDay] = useState<boolean>(params.singleDay === 'true'); // OVERALL - J0x (default false)
@@ -207,7 +210,10 @@ const Shell = () => {
         case 'competition': {
           const nextEntity = e.key as Entity;
           setEntity(nextEntity);
-          if (nextEntity === 'CHALLENGE') setCategory('M18M');
+          if (nextEntity === 'CHALLENGE') {
+            setCategory('M18M');
+            if (!challengeSeasonLabels.includes(season)) setSeason(challengeSeasonLabels[0]);
+          }
           setDay(0);
           break;
         }
@@ -337,7 +343,9 @@ const Shell = () => {
       season,
       'season',
       undefined, // <CalendarOutlined />,
-      seasons.map((cseason) => getItem(cseason, cseason, cseason === season ? <CalendarOutlined /> : <Checked />)),
+      availableSeasons.map((cseason) =>
+        getItem(cseason, cseason, cseason === season ? <CalendarOutlined /> : <Checked />),
+      ),
     ),
   ];
 
