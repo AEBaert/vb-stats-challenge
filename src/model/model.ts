@@ -16,6 +16,11 @@ export const getResourceName = (season: number, entity: Entity, category: string
 export const getCompetitionLabel = (entity: Entity): string =>
   entity === 'CHALLENGE' ? 'Challenge' : entity === 'CDF' || entity === 'ACJEUNES' ? 'CDF' : entity;
 
+// FFVolley M18 youth Cup/Challenge: two competition points for a win,
+// one for a played defeat, zero for a penalty or forfeit.
+export const isM18YouthCup = (competition: Pick<Competition, 'entity' | 'category'>): boolean =>
+  ['CDF', 'ACJEUNES', 'CHALLENGE'].includes(competition.entity) && ['M18M', 'M18F'].includes(competition.category);
+
 export const defaultSeason = 2027;
 export const defaultEntity: Entity = 'CHALLENGE';
 export const defaultCategory = 'M18M';
