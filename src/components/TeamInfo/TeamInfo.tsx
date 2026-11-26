@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import MatchSheetLink from '@/components/MatchSheetLink/MatchSheetLink';
 import Trophies from '@/components/Trophies/Trophies';
-import { type Competition, getCompetitionLabel, type Match, type Team } from '@/model/model';
+import { type Competition, getCompetitionLabel, isM18YouthCup, type Match, type Team } from '@/model/model';
 import {
   getDayRanking,
   getTeamMatch,
@@ -36,6 +36,7 @@ const renderTeam = ({ competition, team, day, displayRanking }: TeamInfoProps) =
           : ` ⏷ ${ranking - previous}`
       : '';
   const dayCount = Math.min(day, team.lastDay);
+  const maxPointsPerMatch = isM18YouthCup(competition) ? 2 : 3;
 
   return (
     <div className={cx('vb-card-header-content', { eliminated })}>
@@ -65,8 +66,8 @@ const renderTeam = ({ competition, team, day, displayRanking }: TeamInfoProps) =
               <div>
                 ranking: {ranking ?? '-'} / {competition.days[day].teams.length} <small>{delta}</small> | points:{' '}
                 {competition.entity === 'CHALLENGE'
-                  ? `${stats.points} / ${3 * stats.matchCount}`
-                  : `${Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${6 * dayCount}`}
+                  ? `${stats.points} / ${maxPointsPerMatch * stats.matchCount}`
+                  : `${stats.matchCount === 0 ? 0 : Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${2 * maxPointsPerMatch * dayCount}`}
                 {competition.entity !== 'CHALLENGE' && 2 * dayCount !== stats.matchCount ? '*' : ''}
               </div>
               <div>
@@ -110,6 +111,7 @@ const renderMatchs = (
             : ` ⏷ ${ranking - previous}`
         : '';
     const dayCount = Math.min(day, teamB.lastDay);
+    const maxPointsPerMatch = isM18YouthCup(competition) ? 2 : 3;
 
     return {
       key: match.id,
