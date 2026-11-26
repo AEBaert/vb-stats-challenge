@@ -13,7 +13,6 @@ import MatchSheetLink from '@/components/MatchSheetLink/MatchSheetLink';
 import TeamInfo from '@/components/TeamInfo/TeamInfo';
 import Trophies from '@/components/Trophies/Trophies';
 import { type Competition, getCompetitionLabel, isM18YouthCup, type Match, type Pool, type Team } from '@/model/model';
-import { getM18QualifiedCount, getPoolAdvancementProbabilities } from '@/model/model-qualification';
 import {
   filterTeam,
   getBoard,
@@ -24,6 +23,7 @@ import {
   getTeamStats,
   poolId2Name,
 } from '@/model/model-helpers';
+import { getM18QualifiedCount, getPoolAdvancementProbabilities } from '@/model/model-qualification';
 import { Sorting } from '@/model/model-sorters';
 
 import '@/app/CompetitionTeams/CompetitionTeams.scss'; // TODO hack
