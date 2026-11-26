@@ -1,5 +1,5 @@
-import { getWinProbability } from './model-helpers';
 import { type Competition, type Pool } from './model';
+import { getWinProbability } from './model-helpers';
 
 interface SetScoreOutcome {
   readonly setsA: number;
