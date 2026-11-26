@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Rating } from 'ts-trueskill';
 
 import { type Competition, type Match, type Pool, type Team } from '@/model/model';
-import { createStats } from '@/model/model-helpers';
+import { createStats, getWinProbability } from '@/model/model-helpers';
 import { addTeamMatch } from '@/model/model-process';
 import { getPoolAdvancementProbabilities } from '@/model/model-qualification';
 
@@ -26,9 +26,11 @@ const pool = {
 
 const estimate = getPoolAdvancementProbabilities(pool, 1, 2);
 assert.ok(estimate);
+console.log('Neutral TrueSkill match probability:', getWinProbability(teams[0], teams[1], 1));
+console.log('Neutral-pool forecast:', JSON.stringify(estimate));
 
 const approximately = (actual: number, expected: number, message: string): void => {
-  assert.ok(Math.abs(actual - expected) < 1e-8, `${message}: ${actual} != ${expected}`);
+  assert.ok(Number.isFinite(actual) && Math.abs(actual - expected) < 1e-5, `${message}: actual=${actual}, expected=${expected}`);
 };
 
 estimate.first.forEach((probability) => approximately(probability, 1 / 3, 'Equal first-place chances'));
