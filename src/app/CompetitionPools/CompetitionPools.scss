@@ -229,6 +229,14 @@
                   }
                 }
               }
+
+              @media (max-width: 640px) {
+                flex-wrap: wrap;
+
+                .vb-card-charts {
+                  margin-left: 1.5rem;
+                }
+              }
             }
           }
         }
