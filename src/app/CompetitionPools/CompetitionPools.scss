@@ -176,6 +176,9 @@
             .vb-card-content {
               // flex-direction: column;
               display: flex;
+              align-items: flex-end;
+              justify-content: space-between;
+              gap: 0.25rem;
 
               .vb-card-text {
                 .subtitle {
@@ -201,13 +204,29 @@
                 }
               }
 
-              .vb-card-chart {
-                position: absolute;
-                right: 0.5rem;
-                bottom: 0.5rem;
+              .vb-card-text {
+                flex: 1;
+                min-width: 0;
+              }
 
-                .ant-progress-inner {
-                  backdrop-filter: blur(15px) grayscale(0.5) opacity(0.8);
+              .vb-card-charts {
+                display: flex;
+                align-items: flex-end;
+                flex-shrink: 0;
+                gap: 0.25rem;
+
+                .vb-card-chart {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 0.125rem;
+
+                  font-size: 0.6875rem;
+                  color: #b7b7b7;
+
+                  .ant-progress-inner {
+                    backdrop-filter: blur(15px) grayscale(0.5) opacity(0.8);
+                  }
                 }
               }
             }
