@@ -112,6 +112,7 @@ export interface Match {
   readonly day: number;
   readonly date: string;
   readonly time: string;
+  readonly venue: string;
   readonly teamA: Team;
   readonly teamB: Team;
   readonly winner?: Team;

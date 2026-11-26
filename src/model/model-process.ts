@@ -56,6 +56,7 @@ export const createMatch = (competition: Competition, data: MatchRow): Match => 
     day,
     date: data.Date,
     time: data.Heure,
+    venue: data.Salle,
     teamA,
     teamB,
     winner,
