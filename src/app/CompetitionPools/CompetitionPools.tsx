@@ -12,7 +12,8 @@ import Help from '@/components/Help/Help';
 import MatchSheetLink from '@/components/MatchSheetLink/MatchSheetLink';
 import TeamInfo from '@/components/TeamInfo/TeamInfo';
 import Trophies from '@/components/Trophies/Trophies';
-import { type Competition, getCompetitionLabel, type Match, type Pool, type Team } from '@/model/model';
+import { type Competition, getCompetitionLabel, isM18YouthCup, type Match, type Pool, type Team } from '@/model/model';
+import { getM18QualifiedCount, getPoolAdvancementProbabilities } from '@/model/model-qualification';
 import {
   filterTeam,
   getBoard,
@@ -45,6 +46,7 @@ const renderTeam = ({
   team,
   day,
   probability,
+  qualificationProbability,
   rank,
   pushModalTeam,
 }: {
@@ -52,6 +54,7 @@ const renderTeam = ({
   team: Team;
   day: number;
   probability: number;
+  qualificationProbability?: number;
   rank: number;
   pushModalTeam: (team: Team) => void;
 }) => {
@@ -86,6 +89,17 @@ const renderTeam = ({
           : ` ⏷ ${ranking - previous}`
       : '';
   const dayCount = Math.min(day, team.lastDay);
+  const maxPointsPerMatch = isM18YouthCup(competition) ? 2 : 3;
+  const qualificationColor =
+    qualificationProbability === undefined
+      ? undefined
+      : qualificationProbability < 33
+        ? red[5]
+        : qualificationProbability < 50
+          ? gold[6]
+          : qualificationProbability < 80
+            ? blue[6]
+            : green[6];
 
   return (
     <div
@@ -115,8 +129,8 @@ const renderTeam = ({
               <div>
                 ranking: {ranking ?? '-'} / {competition.days[day].teams.length} <small>{delta}</small> | points:{' '}
                 {competition.entity === 'CHALLENGE'
-                  ? `${stats.points} / ${3 * stats.matchCount}`
-                  : `${stats.matchCount === 0 ? 0 : Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${6 * dayCount}`}
+                  ? `${stats.points} / ${maxPointsPerMatch * stats.matchCount}`
+                  : `${stats.matchCount === 0 ? 0 : Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${2 * maxPointsPerMatch * dayCount}`}
                 {competition.entity !== 'CHALLENGE' && 2 * dayCount !== stats.matchCount ? '*' : ''}
               </div>
               <div>
@@ -130,9 +144,30 @@ const renderTeam = ({
           </div>
         </div>
 
-        {(day > 1 || competition.entity === 'CHALLENGE') && (
-          <div className="vb-card-chart">
-            <Progress type="dashboard" percent={probability} size={88} strokeColor={color} strokeWidth={8} />
+        {(day > 1 || competition.entity === 'CHALLENGE' || qualificationProbability !== undefined) && (
+          <div className="vb-card-charts">
+            <div className="vb-card-chart" title="Probabilité estimée de terminer premier">
+              <Progress
+                type="dashboard"
+                percent={probability}
+                size={qualificationProbability === undefined ? 88 : 68}
+                strokeColor={color}
+                strokeWidth={8}
+              />
+              {qualificationProbability !== undefined && <span>1er</span>}
+            </div>
+            {qualificationProbability !== undefined && (
+              <div className="vb-card-chart" title="Probabilité estimée de terminer dans les deux premiers">
+                <Progress
+                  type="dashboard"
+                  percent={qualificationProbability}
+                  size={68}
+                  strokeColor={qualificationColor}
+                  strokeWidth={8}
+                />
+                <span>Qualif.</span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -199,6 +234,8 @@ const renderPool = ({
   const getDay = (day: number) => (competition && competition && competition.days[day]?.pf ? 'PF' : `J${day}`);
   const { gold, volcano } = presetDarkPalettes;
   const [probabilities, orders] = getPoolProbabilities(pool, day);
+  const qualifyingPlaces = getM18QualifiedCount(competition, day);
+  const advancement = qualifyingPlaces ? getPoolAdvancementProbabilities(pool, day, qualifyingPlaces) : undefined;
   const firstCount = pool.teams.filter((team) => team.ranking.pools[day - 1] === 1).length;
   const thirdCount = pool.teams.filter((team) => team.ranking.pools[day - 1] === 3).length;
   return (
@@ -223,6 +260,9 @@ const renderPool = ({
                 team,
                 day,
                 probability: Math.round(100 * probabilities[index]),
+                qualificationProbability: advancement
+                  ? Math.round(100 * advancement.qualified[index])
+                  : undefined,
                 rank: orders[index],
                 pushModalTeam,
               }),
