@@ -5,6 +5,7 @@ import { Layout, Menu, type MenuProps, Result, Spin } from 'antd';
 import { useWindowSize } from 'react-use';
 
 import CompetitionBoard from '@/app/CompetitionBoard/CompetitionBoard';
+import CompetitionDraw from '@/app/CompetitionDraw/CompetitionDraw';
 import CompetitionGraph from '@/app/CompetitionGraph/CompetitionGraph';
 import CompetitionPools from '@/app/CompetitionPools/CompetitionPools';
 import {
@@ -33,6 +34,7 @@ const seasons = iseasons.map(seasonToString);
 const challengeSeasonLabels = challengeSeasons.map(seasonToString);
 
 const tabNames: Record<string, string> = {
+  draw: 'Tirage',
   pools: 'Pools',
   // teams: 'Teams',
   board: 'Board',
@@ -364,6 +366,9 @@ const Shell = () => {
         />
       </Layout.Header>
       <Layout.Content>
+        {competition && tab === 'draw' && (
+          <CompetitionDraw competition={competition} day={day} tokens={tokens} setTokens={setTokens} />
+        )}
         {competition && tab === 'pools' && (
           <CompetitionPools
             // className={tab === 'pools' ? '' : 'no-display'}
