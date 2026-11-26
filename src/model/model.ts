@@ -121,6 +121,7 @@ export interface Match {
   readonly teamA: Team;
   readonly teamB: Team;
   readonly winner?: Team;
+  readonly penalizedTeamIds?: readonly string[];
   readonly setA: number;
   readonly setB: number;
   readonly totalA: number;
