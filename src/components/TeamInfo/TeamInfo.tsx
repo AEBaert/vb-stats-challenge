@@ -165,8 +165,8 @@ const renderMatchs = (
           <div>
             ranking: {ranking ?? '-'} / {competition.days[day].teams.length} <small>{delta}</small> | points:{' '}
             {competition.entity === 'CHALLENGE'
-              ? `${stats.points} / ${3 * stats.matchCount}`
-              : `${Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${6 * dayCount}`}
+              ? `${stats.points} / ${maxPointsPerMatch * stats.matchCount}`
+              : `${stats.matchCount === 0 ? 0 : Math.round((stats.points * 2 * dayCount) / stats.matchCount)} / ${2 * maxPointsPerMatch * dayCount}`}
             {competition.entity !== 'CHALLENGE' && 2 * dayCount !== stats.matchCount ? '*' : ''}
           </div>
           <div>
