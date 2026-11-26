@@ -175,3 +175,41 @@ unreasonable rank discontinuities.
 
 Any future change to this modelling assumption or to the original TrueSkill
 update parameters must be documented here before being merged.
+
+
+## M18 youth-cup ranking points and qualification forecast
+
+The 2026/27 FFVolley RPE for Coupe et Challenge M18 (article 8) gives:
+- two ranking points for a win, irrespective of whether it is 2-0 or 2-1;
+- one point for a played loss, irrespective of its score;
+- zero for a loss by forfeit or penalty.
+
+Ties are broken first by the sets-won/sets-lost ratio, then the points-won/points-lost ratio.
+
+This youth-M18 ranking rule is applied to the M18 Coupe/Challenge (and not to
+unrelated championships that use a different 3/2/1/0 scale). The match-level
+TrueSkill update is unchanged.
+
+For 2026/27 M18M rounds known to qualify **two teams from each three-team
+pool** (CDF J1-J4 and Challenge J1-J3), the Pools page adds a separate **Qualif.**
+gauge. The original **1er** gauge is preserved and uses its original normalized
+product-of-two-win-probabilities formula.
+
+The qualification forecast instead enumerates all (4^3 = 64) combinations of
+results of the three matches (2-0, 2-1, 1-2, 0-2). Each matchup's TrueSkill
+match-win probability (w) is converted to an estimated per-set probability
+(p) by solving (w = p^2 (3 - 2p)). This assumes independent identically
+distributed sets and is not a calibrated set-score prediction model.
+
+Each scenario uses the official two/one ranking points and set ratio. Where
+teams remain tied and a points ratio would be needed, the unresolved ranking
+places are shared equally in probability rather than inventing set point
+scores. The reported qualification percentage is therefore an **estimate**,
+not an exact official or empirically calibrated probability. Possible
+repêchages and exemptions outside the automatic two places are not modeled.
+
+Future rounds may have a different qualifier count; the gauge must only be
+enabled once the number of automatic qualifying places is established.
+
+Official RPE (art. 8):
+https://extranet.ffvb.org/data/Files/manuel_juridique/2026-2027/FFvolley_RPE_M18_2026-27.pdf
