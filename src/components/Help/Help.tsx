@@ -90,6 +90,17 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
             permet d&apos;estimer la probabilité de victoire pour chaque match et la probabilité pour chaque équipe de
             terminer premier de sa poule.
           </p>
+          {competition.season === '2026/2027' && competition.category === 'M18M' ? (
+            <p>
+              Les cercles <strong>1er</strong> indiquent la chance estimée de terminer premier de poule selon le
+              modèle original. Les cercles <strong>Qualif.</strong>, affichés pour les tours où deux équipes sur
+              trois se qualifient, estiment la chance de finir parmi les deux premières. Ils combinent les
+              probabilités TrueSkill des trois matchs avec 64 scénarios possibles de scores en sets (2-0, 2-1,
+              1-2, 0-2). Les scores en sets sont estimés à partir des probabilités de match, et les égalités
+              encore indécidables au ratio de points sont réparties équitablement : ce sont des prévisions,
+              pas des probabilités officielles.
+            </p>
+          ) : null}
           {competition.entity === 'CHALLENGE' ? (
             <p>
               Pour le Challenge M18M, le <i>rating</i> suit la même équipe sur la saison : une équipe entrant au T1
@@ -99,6 +110,12 @@ const Help = ({ competition, day, singleDay: _singleDay, qualified: _qualified, 
               les matchs du Challenge. Au J2 uniquement, le classement global place d&apos;abord les premiers de
               poule, puis les deuxièmes, puis les troisièmes ; à place égale, le rating TrueSkill départage les
               équipes. À partir du J3, le classement global standard est de nouveau utilisé.
+            </p>
+          ) : null}
+          {competition.category.startsWith('M18') && (competition.entity === 'CDF' || competition.entity === 'CHALLENGE') ? (
+            <p>
+              Barème officiel M18 : 2 points par victoire, 1 point par défaite jouée et 0 en cas de
+              forfait ou de pénalité. À égalité, le ratio de sets précède celui des points.
             </p>
           ) : null}
           <p>

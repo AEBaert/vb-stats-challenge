@@ -2,6 +2,7 @@ import {
   type Competition,
   type CompetitionDay,
   HIGH,
+  isM18YouthCup,
   type Match,
   type MatchRow,
   MEDIUM,
@@ -30,8 +31,14 @@ export const createMatch = (competition: Competition, data: MatchRow): Match => 
   const teamB = getTeam(competition, data.EQB_no, data.EQB_nom);
   const day = Number(data.Jo);
   const [ssetA, ssetB] = data.Set ? data.Set.split('/') : ['0', '0'];
-  const setA = ssetA === 'F' || ssetA === 'P' ? 0 : Number(ssetA);
-  const setB = ssetB === 'F' || ssetB === 'P' ? 0 : Number(ssetB);
+  const codeA = ssetA.trim();
+  const codeB = ssetB.trim();
+  const penalizedTeamIds = [
+    ...(['F', 'P'].includes(codeA) ? [teamA.id] : []),
+    ...(['F', 'P'].includes(codeB) ? [teamB.id] : []),
+  ];
+  const setA = ['F', 'P'].includes(codeA) ? 0 : Number(codeA);
+  const setB = ['F', 'P'].includes(codeB) ? 0 : Number(codeB);
   const [stotalA, stotalB] = data.Total ? data.Total.split('-') : ['0', '0'];
   const totalA = Number(stotalA);
   const totalB = Number(stotalB);
@@ -60,6 +67,7 @@ export const createMatch = (competition: Competition, data: MatchRow): Match => 
     teamA,
     teamB,
     winner,
+    penalizedTeamIds,
     setA,
     setB,
     totalA,
@@ -110,7 +118,7 @@ export const updateRating = (match: Match, statsA: Stats, statsB: Stats) => {
   }
 };
 
-export const addTeamMatch = (team: Team, stats: Stats, match: Match) => {
+export const addTeamMatch = (competition: Competition, team: Team, stats: Stats, match: Match) => {
   stats.matchs = [...stats.matchs, match];
   if (match.winner) {
     const tmatch = getTeamMatch(team, match);
@@ -122,10 +130,16 @@ export const addTeamMatch = (team: Team, stats: Stats, match: Match) => {
       stats.pointLost += score.scoreB;
     });
     if (tmatch.winner === team) {
-      stats.points += tmatch.setA - tmatch.setB > 1 ? 3 : 2;
+      stats.points += isM18YouthCup(competition) ? 2 : tmatch.setA - tmatch.setB > 1 ? 3 : 2;
       stats.matchWon++;
     } else {
-      stats.points += tmatch.setB - tmatch.setA === 1 ? 1 : 0;
+      stats.points += isM18YouthCup(competition)
+        ? tmatch.penalizedTeamIds?.includes(team.id)
+          ? 0
+          : 1
+        : tmatch.setB - tmatch.setA === 1
+          ? 1
+          : 0;
       stats.matchLost++;
     }
   }
@@ -148,12 +162,12 @@ export const addCompetitionMatch = (competition: Competition, match: Match) => {
   competition.matchs.push(match); // = [...competition.matchs, match];
   competition.days[day].matchs.push(match); // idem
   // dstats and gstats are already inited
-  addTeamMatch(teamA, teamA.dstats[day], match);
+  addTeamMatch(competition, teamA, teamA.dstats[day], match);
   // addTeamMatch(teamA, teamA.sstats[day], match);
-  addTeamMatch(teamA, teamA.gstats[day], match);
-  addTeamMatch(teamB, teamB.dstats[day], match);
+  addTeamMatch(competition, teamA, teamA.gstats[day], match);
+  addTeamMatch(competition, teamB, teamB.dstats[day], match);
   // addTeamMatch(teamB, teamB.sstats[day], match);
-  addTeamMatch(teamB, teamB.gstats[day], match);
+  addTeamMatch(competition, teamB, teamB.gstats[day], match);
 
   updateRating(match, teamA.dstats[day], teamB.dstats[day]);
   // updateRating(match, teamA.sstats[day], teamB.sstats[day]);
